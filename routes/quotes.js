@@ -11,17 +11,25 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  var expected = ['text', 'author', 'pic'];
+  var expected = ['text', 'author', 'pic', 'secret'];
   if (!parser.checkBody(req.body, expected)) {
     res.status(400);
     res.send({ "error": "Request Body is insufficient" })
+    return
+  }
+  const { text, author, pic, secret } = req.body;
+
+  if (secret != process.env.SECRET) {
+    res.status(401)
+    res.send({ "error": "You do not have permissions" })
+    return
   }
   
-  const { text, author, pic } = req.body;
   Quotes.findOne({ text: text }).then((existingQuote)=> {
     if (existingQuote) {
       res.status(400);
       res.send({ "error": "Already exists" });
+      return
     } else {
       Quotes.count({}, function(err, count) {
         let newQuote = new Quotes({ 
@@ -32,6 +40,7 @@ router.post('/', function(req, res, next) {
         }).save().then(()=> {
           res.status(201);
           res.send({"response": "Successfully created Quote object."});
+          return
         });
       });
     }
