@@ -11,7 +11,7 @@ var quoteModel = require('./models/quote');
 var indexRouter = require('./routes/index');
 var quoteRouter = require('./routes/quotes')
 
-const mongoURI;
+var mongoURI;
 if (process.env.DBURI) {
   mongoURI = process.env.DBURI;
 } else {
