@@ -1,11 +1,19 @@
 var createError = require('http-errors');
 var express = require('express');
+var mongoose = require('mongoose');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bodyParser = require('body-parser');
+
+const keys = require('./config/keys');
+var quoteModel = require('./models/quote');
 
 var indexRouter = require('./routes/index');
 var quoteRouter = require('./routes/quotes')
+
+
+mongoose.connect(keys.mongoURI);
 
 var app = express();
 
@@ -18,6 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json())
+
 
 app.use('/', indexRouter);
 app.use('/quote', quoteRouter);
@@ -37,6 +48,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT);
