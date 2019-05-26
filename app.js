@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
 
+const keys = require('./config/keys');
+
 var quoteModel = require('./models/quote');
 
 var indexRouter = require('./routes/index');
