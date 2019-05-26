@@ -6,14 +6,19 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
 
-const keys = require('./config/keys');
 var quoteModel = require('./models/quote');
 
 var indexRouter = require('./routes/index');
 var quoteRouter = require('./routes/quotes')
 
-
-mongoose.connect(keys.mongoURI);
+const mongoURI;
+if (process.env.DBURI) {
+  mongoURI = process.env.DBURI;
+} else {
+  const keys = require('./config/keys');
+  mongoURI = keys.mongoURI;
+}
+mongoose.connect(mongoURI);
 
 var app = express();
 
