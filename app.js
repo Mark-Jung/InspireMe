@@ -11,14 +11,7 @@ var quoteModel = require('./models/quote');
 var indexRouter = require('./routes/index');
 var quoteRouter = require('./routes/quotes')
 
-var mongoURI;
-if (process.env.DBURI) {
-  mongoURI = process.env.DBURI;
-} else {
-  const keys = require('./config/keys');
-  mongoURI = keys.mongoURI;
-}
-mongoose.connect(mongoURI);
+mongoose.connect(keys.mongoURI);
 
 var app = express();
 
