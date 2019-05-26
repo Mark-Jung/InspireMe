@@ -5,13 +5,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
+var cors = require('cors')
 
 const keys = require('./config/keys');
 
 var quoteModel = require('./models/quote');
 
 var indexRouter = require('./routes/index');
-var quoteRouter = require('./routes/quotes')
+var quoteRouter = require('./routes/quotes');
+
+
 
 mongoose.connect(keys.mongoURI);
 
@@ -28,6 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
+app.use(cors());
 
 
 app.use('/', indexRouter);
