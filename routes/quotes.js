@@ -48,13 +48,24 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/qod', function(req, res, next) {
-  let response = {
-    "response": {
-      "quote":"The older I get, the more that I see, my parents aren't heroes.",
-      "author": "Sasha Sloan"
+  var today = new Date();
+  var cnt = today.getDate() + (today.getMonth()+1)*30;
+  
+  Quotes.findOne({ count: cnt }).then((existingQuote)=> {
+    if (existingQuote) {
+      let response = {
+        "response": {
+          "quote": existingQuote.text,
+          "author": existingQuote.author,
+          "pic": existingQuote.pic
+        }
+      }
+      res.send(response);
+    } else {
+      res.send({ "quote": cnt});
+      //res.send({ "quote": "No longer Maintained" });
     }
-  }
-  res.send(response);
+  });
 });
 
 
